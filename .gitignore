@@ -4,3 +4,6 @@ constitution.*
 mecab.py
 
 *.png
+
+.env
+keys.txt

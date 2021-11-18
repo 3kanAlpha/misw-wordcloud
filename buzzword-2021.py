@@ -5,7 +5,7 @@ import MeCab
 from wordcloud import WordCloud
 import re
 
-FONT_PATH = r"C:\Users\あるふぁ\AppData\Local\Microsoft\Windows\Fonts\SourceHanSans-Regular.otf"
+FONT_PATH = r"C:/Users/あるふぁ/AppData/Local/Microsoft/Windows/Fonts/SourceHanSans-Regular.otf"
 TEXT_NAME = "rashomon"
 
 def generate_wordcloud(text):
