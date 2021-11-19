@@ -10,6 +10,7 @@ load_dotenv('.env')
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 BEARER_TOKEN = os.environ.get("BEARER_TOKEN")
 
+USER_IDS_PATH = "user_ids.json"
 
 def create_url(user_name):
     # Specify the usernames that you want to lookup below
@@ -45,15 +46,40 @@ def connect_to_endpoint(url):
         )
     return response.json()
 
+def try_to_insert(user_ids, user_id):
+    fl = True
+
+    for user in user_ids["ids"]:
+        if user["id"] == user_id:
+            fl = False
+            break
+
+    return fl
 
 def main():
     user_names = input().split(",")
+
+    user_ids_json = open(USER_IDS_PATH, 'r', encoding="utf-8")
+    user_ids = json.load(user_ids_json)
+    user_ids_json.close()
+
+    new_user_ids = []
 
     for user_name in user_names:
         url = create_url(user_name)
         json_response = connect_to_endpoint(url)
 
         print("{}'s user ID: {}".format(user_name, json_response["data"][0]["id"]))
+
+        if try_to_insert(user_ids, json_response["data"][0]["id"]) is True:
+            new_user_ids.append({"id": json_response["data"][0]["id"], "name": user_name})
+    
+    if len(new_user_ids) > 0:
+        for new_user_id in new_user_ids:
+            user_ids["ids"].append(new_user_id)
+        
+        with open(USER_IDS_PATH, 'w', encoding="utf-8") as f:
+            json.dump(user_ids, f, indent=4, ensure_ascii=False)
 
 
 if __name__ == "__main__":
