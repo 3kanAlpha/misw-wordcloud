@@ -7,3 +7,5 @@ mecab.py
 
 .env
 keys.txt
+
+*.json
