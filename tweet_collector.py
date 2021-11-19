@@ -7,11 +7,9 @@ import requests
 
 load_dotenv('.env')
 
-API_KEY = os.environ.get("API_KEY")
-API_KEY_SECRET = os.environ.get("API_KEY_SECRET")
 BEARER_TOKEN = os.environ.get("BEARER_TOKEN")
 
-TWEETS_DIR = "tweets/"
+TWEETS_PATH = "tweets.json"
 
 def create_url(user_id):
     return "https://api.twitter.com/2/users/{}/tweets".format(user_id)

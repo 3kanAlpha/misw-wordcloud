@@ -5,8 +5,14 @@ import MeCab
 from wordcloud import WordCloud
 import re
 
-FONT_PATH = r"C:/Users/あるふぁ/AppData/Local/Microsoft/Windows/Fonts/SourceHanSans-Regular.otf"
+from dotenv import load_dotenv
+
+load_dotenv('.env')
+
+# SourceHanSans
+FONT_PATH = os.environ.get("FONT_PATH")
 TEXT_NAME = "rashomon"
+TWEETS_PATH = "tweets.json"
 
 def generate_wordcloud(text):
     wc = WordCloud(background_color="white", font_path=FONT_PATH, max_words=1000, max_font_size=300, width=800, height=600)
@@ -27,6 +33,7 @@ def get_words_from_text(text):
     words = []
 
     for line in lines:
+        # tabかカンマでsplitする
         col = re.split('\t|,', line)
         
         if col[1] in ["形容詞", "動詞","名詞", "副詞"]:
