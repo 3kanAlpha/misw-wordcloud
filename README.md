@@ -1,6 +1,11 @@
 # みす流行語大賞2021
 PythonでWordCloud作ってみる
 
+# Requirements
+* Python 3.8.x or later
+* MeCab + [mecab-ipadic-NEologd](https://github.com/neologd/mecab-ipadic-neologd)
+* [wordcloud](https://github.com/amueller/word_cloud)
+
 # Docs
 ## buzzword-2021.py
 このアプリの本体。与えられたテキストを形態素解析してWordCloudを生成する。  
@@ -14,7 +19,3 @@ WordCloudには名詞、動詞、形容詞、副詞を利用している。
 ## tweet_collector.py
 上で取得したユーザーIDを利用して、特定のユーザーのツイート（リツイート、リプライなど含む）を取得する。  
 (WIP)
-
-## user_ids.json
-ユーザー名とユーザーIDの対応表。  
-自分のアカウント(@luigi_0829_2)をフォローしてくれている人から適当に選んでいる。
