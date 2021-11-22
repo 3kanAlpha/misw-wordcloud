@@ -16,7 +16,7 @@ def create_url(user_name):
     # Specify the usernames that you want to lookup below
     # You can enter up to 100 comma-separated values.
     usernames = "usernames=" + user_name
-    user_fields = "user.fields=description,created_at"
+    user_fields = "user.fields=description,created_at,protected"
     # User fields are adjustable, options include:
     # created_at, description, entities, id, location, name,
     # pinned_tweet_id, profile_image_url, protected,
@@ -56,14 +56,29 @@ def try_to_insert(user_ids, user_id):
 
     return fl
 
+def get_index(user_ids, user_id):
+    ret = -1
+
+    for user in user_ids["ids"]:
+        if user["id"] == user_id:
+            ret = user_ids["ids"].index(user)
+            break
+
+    return ret
+
 def main():
-    user_names = input().split(",")
+    # custom_user_names = input().split(",")
 
     user_ids_json = open(USER_IDS_PATH, 'r', encoding="utf-8")
     user_ids = json.load(user_ids_json)
     user_ids_json.close()
 
+    user_names = []
+    for user in user_ids["ids"]:
+        user_names.append(user["name"])
+
     new_user_ids = []
+    updated = True
 
     for user_name in user_names:
         url = create_url(user_name)
@@ -71,10 +86,14 @@ def main():
 
         print("{}'s user ID: {}".format(user_name, json_response["data"][0]["id"]))
 
-        if try_to_insert(user_ids, json_response["data"][0]["id"]) is True:
-            new_user_ids.append({"id": json_response["data"][0]["id"], "name": user_name})
+        i = get_index(user_ids, json_response["data"][0]["id"])
+
+        if i == -1:
+            new_user_ids.append({"id": json_response["data"][0]["id"], "name": user_name, "protected": json_response["data"][0]["protected"]})
+        else:
+            user_ids["ids"][i] = {"id": json_response["data"][0]["id"], "name": user_name, "protected": json_response["data"][0]["protected"]}
     
-    if len(new_user_ids) > 0:
+    if updated:
         for new_user_id in new_user_ids:
             user_ids["ids"].append(new_user_id)
         

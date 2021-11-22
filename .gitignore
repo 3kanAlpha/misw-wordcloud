@@ -1,11 +1,6 @@
-/127_ruby_150/
 
-constitution.*
-mecab.py
-
-*.png
+/tweets/
 
 .env
-keys.txt
 
 *.json

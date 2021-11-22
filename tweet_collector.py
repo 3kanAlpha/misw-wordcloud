@@ -1,62 +1,49 @@
-import os
-from dotenv import load_dotenv
-
 import json
+import subprocess
+import os
+import datetime
+import arrow
 
-import requests
+from subprocess import PIPE
+
+import stweet as st
+
+from dotenv import load_dotenv
 
 load_dotenv('.env')
 
-BEARER_TOKEN = os.environ.get("BEARER_TOKEN")
+USER_IDS_PATH = "user_ids.json"
 
-TWEETS_PATH = "tweets.json"
+TWEETS_DIR = "tweets/"
+DATE_SINCE = datetime.datetime(2021, 1, 1)
+DATE_SINCE_ARR = arrow.get(DATE_SINCE)
 
-def create_url(user_id):
-    return "https://api.twitter.com/2/users/{}/tweets".format(user_id)
+def try_search(user):
+    search_tweets_task = st.SearchTweetsTask(from_username=user["name"], since=DATE_SINCE_ARR, tweets_limit=10000)
+    output_jl_tweets = st.JsonLineFileRawOutput(TWEETS_DIR + user["name"] + '_tweets.jsonl')
+    output_jl_users = st.JsonLineFileRawOutput(TWEETS_DIR + user["name"] + '_users.jsonl')
+    output_print = st.PrintRawOutput()
+    st.TweetSearchRunner(search_tweets_task=search_tweets_task,
+                         tweet_raw_data_outputs=[output_jl_tweets],
+                         user_raw_data_outputs=[output_jl_users]).run()
 
-def get_params():
-    # Tweet fields are adjustable.
-    # Options include:
-    # attachments, author_id, context_annotations,
-    # conversation_id, created_at, entities, geo, id,
-    # in_reply_to_user_id, lang, non_public_metrics, organic_metrics,
-    # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
-    # source, text, and withheld
-    return {"tweet.fields": "created_at"}
-
-
-def bearer_oauth(r):
-    """
-    Method required by bearer token authentication.
-    """
-
-    r.headers["Authorization"] = f"Bearer {BEARER_TOKEN}"
-    r.headers["User-Agent"] = "v2UserTweetsPython"
-    return r
-
-
-def connect_to_endpoint(url, params):
-    response = requests.request("GET", url, auth=bearer_oauth, params=params)
-    # print(response.status_code)
-    if response.status_code != 200:
-        raise Exception(
-            "Request returned an error: {} {}".format(
-                response.status_code, response.text
-            )
-        )
-    return response.json()
+def try_user_scrap(user):
+    user_task = st.GetUsersTask([user["name"]])
+    output_json = st.JsonLineFileRawOutput('output_raw_user.jsonl')
+    output_print = st.PrintRawOutput()
+    st.GetUsersRunner(get_user_task=user_task, raw_data_outputs=[output_print, output_json]).run()
 
 def main():
-    user_id = input()
+    user_ids_json = open(USER_IDS_PATH, 'r', encoding="utf-8")
+    user_ids = json.load(user_ids_json)
+    user_ids_json.close()
 
-    url = create_url(user_id)
-    params = get_params()
-    json_response = connect_to_endpoint(url, params)
+    for user in user_ids["ids"]:
+        if user["protected"]:
+            continue
 
-    tweets = json_response["data"]
-
-    for tweet in tweets:
-        print("{}: {}".format(tweet["id"], tweet["text"]))
+        # try_search(user)
+        break
 
 if __name__ == "__main__":
     main()
