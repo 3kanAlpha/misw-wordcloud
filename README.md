@@ -16,5 +16,6 @@ WordCloudには名詞、動詞、形容詞、副詞を利用している。
 ユーザー名（Twitterで@の後ろに付いている文字列）から固有のユーザーIDを取得する。  
 (Progress: 100%)
 
-## tweet_collector.py (Unused)
+## tweet_collector.py
 twintを利用して、特定のユーザーのツイート（リツイート、リプライなど含む）を取得する。  
+取得したツイートはJSON Lines形式で保存される。
