@@ -5,6 +5,7 @@ PythonでWordCloud作ってみる
 * Python 3.8.x or later
 * MeCab + [mecab-ipadic-NEologd](https://github.com/neologd/mecab-ipadic-neologd)
 * [wordcloud](https://github.com/amueller/word_cloud)
+* twint
 
 # Docs
 ## buzzword-2021.py
@@ -19,3 +20,6 @@ WordCloudには名詞、動詞、形容詞、副詞を利用している。
 ## tweet_collector.py
 twintを利用して、特定のユーザーのツイート（リツイート、リプライなど含む）を取得する。  
 取得したツイートはJSON Lines形式で保存される。
+
+## build_database.py
+tweet_collector.pyで取得したツイートを整形してJSONに構成し直す。
