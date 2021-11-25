@@ -21,5 +21,5 @@ WordCloudには名詞、動詞、形容詞、副詞を利用している。
 twintを利用して、特定のユーザーのツイート（リツイート、リプライなど含む）を取得する。  
 取得したツイートはJSON Lines形式で保存される。
 
-## build_database.py
+## database_builder.py
 tweet_collector.pyで取得したツイートを整形してJSONに構成し直す。

@@ -15,7 +15,6 @@ load_dotenv('.env')
 
 # SourceHanSans
 FONT_PATH = os.environ.get("FONT_PATH")
-TEXT_NAME = "rashomon"
 
 TWEETS_DIR = "tweets/"
 TWEETS_JSON_PATH = TWEETS_DIR + "tweets.json"
