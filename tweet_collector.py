@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime, timedelta
+import time
 
 import twint
 
@@ -45,13 +46,14 @@ def get_tweets_this_year(user_name, delta=1):
     while start_date < now:
         get_tweets(user_name, start_date.strftime("%Y-%m-%d"), (start_date + day_delta).strftime("%Y-%m-%d"))
         start_date += day_delta
+        time.sleep(1)
 
 def main():
     user_ids_json = open(USER_IDS_PATH, 'r', encoding="utf-8")
     user_ids = json.load(user_ids_json)
     user_ids_json.close()
 
-    left = 11
+    left = 0
 
     for user in user_ids["ids"]:
         if left > 0:
@@ -63,6 +65,7 @@ def main():
 
         get_tweets_this_year(user["name"], delta=3)
         print("Progress {}/{} ...".format(user_ids["ids"].index(user)+1, len(user_ids["ids"])))
+        time.sleep(15)
     
     print("Done!")
 
