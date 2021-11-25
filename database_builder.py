@@ -7,18 +7,10 @@ TWEETS_DIR = "tweets\\"
 TWEETS_JSON_PATH = TWEETS_DIR + "tweets.json"
 USER_IDS_PATH = "user_ids.json"
 
-def find_tweet(old_tweets, screen_name, tweet_id):
-    all_tweets = old_tweets.get("tweets")
-    if all_tweets is None:
-        return False
-
-    user_tweets = all_tweets.get(screen_name)
-    if user_tweets is None:
-        return False
-
+def find_tweet(tweets, screen_name, tweet_id):
     fl = False
 
-    for tweet in user_tweets:
+    for tweet in tweets:
         if tweet["id"] == tweet_id:
             fl = True
             break
@@ -34,7 +26,7 @@ def combine_user_tweets(old_tweets, screen_name):
     for file in files:
         with jsonlines.open(file) as reader:
             for tweet in reader:
-                if not find_tweet(old_tweets, screen_name, tweet["id"]):
+                if not find_tweet(tweets, screen_name, tweet["id"]):
                     tweets.append(tweet)
 
     return tweets

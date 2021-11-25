@@ -64,6 +64,26 @@ def remove_words(list):
             list.remove(s)
         elif s == "co":
             list.remove(s)
+        elif s == "t":
+            list.remove(s)
+        elif s == "ー":
+            list.remove(s)
+        elif s == "てる":
+            list.remove(s)
+
+def remove_words_by_counter(list, counter):
+    max_val = 330
+
+    for s in list:
+        if counter[s] > max_val:
+            list.remove(s)
+
+def print_counter(counter):
+    threshold = 80
+
+    for x in counter:
+        if counter[x] > threshold:
+            print("{}: {}".format(x, counter[x]))
 
 def main():
     user_ids_json = open(USER_IDS_PATH, 'r', encoding="utf-8")
@@ -88,10 +108,11 @@ def main():
 
     # time_1 = time.perf_counter()
 
-    # counter = collections.Counter(words_to_wc)
-
     print("Removing unrelated words ...")
     remove_words(words_to_wc)
+
+    counter = collections.Counter(words_to_wc)
+    remove_words_by_counter(words_to_wc, counter)
 
     # time_2 = time.perf_counter()
 
