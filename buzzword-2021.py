@@ -70,6 +70,18 @@ def remove_words(list):
             list.remove(s)
         elif s == "てる":
             list.remove(s)
+        elif s == "自分":
+            list.remove(s)
+        elif s == "て":
+            list.remove(s)
+        elif s == "の":
+            list.remove(s)
+        elif s == "それ":
+            list.remove(s)
+        elif s == "気":
+            list.remove(s)
+        elif s == "ん":
+            list.remove(s)
 
 def remove_words_by_counter(list, counter):
     max_val = 330
